@@ -75,18 +75,18 @@ MongoClient.connect(connnectionURL, { useNewURLParser:true }, (error,client) => 
     //     console.log(error)
     // })
 //Delete
-    db.collection('users').deleteOne({
-        _id: new ObjectID('63a9f1d31ca3a8847df261fa')
-    }).then((result)=>{
-            console.log(result)
-        }).catch((error)=>{
-            console.log(error)
-        })
-    db.collection('users').deleteMany({
-        age:27
-    }).then((result)=>{
-            console.log(result)
-        }).catch((error)=>{
-            console.log(error)
-        })
+    // db.collection('users').deleteOne({
+    //     _id: new ObjectID('63a9f1d31ca3a8847df261fa')
+    // }).then((result)=>{
+    //         console.log(result)
+    //     }).catch((error)=>{
+    //         console.log(error)
+    //     })
+    // db.collection('users').deleteMany({
+    //     age:27
+    // }).then((result)=>{
+    //         console.log(result)
+    //     }).catch((error)=>{
+    //         console.log(error)
+    //     })
 })
