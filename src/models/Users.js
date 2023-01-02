@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-
-
-const User = mongoose.model('User',{
+const bcrypt = require('bcryptjs')
+const jsontoken = require('jsonwebtoken')
+const userSchema = new mongoose.Schema({
     name:{
         type: String,
         required:true,
@@ -15,6 +15,7 @@ const User = mongoose.model('User',{
         type: String,
         required:true,
         lowercase: true,
+        unique:true,
         trim:true,
         validate(value){
             if(!validator.isEmail(value))
@@ -38,8 +39,46 @@ const User = mongoose.model('User',{
             if (value<0)
                 throw new Error('Age must be greater than 0')
         }
-    }
+    },
+    tokens:[{
+        token:{
+              type: String,
+              required: true  
+        }
+    }]
 })
+
+userSchema.methods.createAuthToken = async function() {
+        const user = this
+        const token = jsontoken.sign({_id:user.id},'thisismycourse')
+        console.log(token)
+        user.tokens = user.tokens.concat({token})
+        await user.save()
+
+        return token
+}
+
+userSchema.statics.findByCredentials = async (email,password) => {
+    const user = await User.findOne({email})
+    if(!user){
+        throw new Error('Unable to login')
+    }
+    const isMatch = await bcrypt.compare(password,user.password)
+    if(!isMatch)
+        throw new Error('Unable to login')
+    return user
+}
+
+userSchema.pre('save',async function(next){
+
+    const user = this
+
+    if(user.isModified('password')){
+        user.password = await bcrypt.hash(user.password,8)    
+    }
+    next()
+})
+const User = mongoose.model('User',userSchema)
 
 // const me = new User({
 //     name: '   Mike       ',
