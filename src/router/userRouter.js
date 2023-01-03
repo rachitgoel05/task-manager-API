@@ -2,7 +2,7 @@ const express = require('express')
 const User = require('../models/Users')
 const router = new express.Router()
 
-router.post('/users', async (req,res)=>{
+router.post('/users',async (req,res)=>{
     const user = new User(req.body)  
     try{
         await user.save()
@@ -24,7 +24,7 @@ router.post('/user/login', async (req,res)=>{
     }
 })
 
-router.get('/users', async (req,res)=>{
+router.get('/users',async (req,res)=>{
     try{
         const user = await User.find({})
         res.send(user)
