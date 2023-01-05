@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
-
-const Tasks = mongoose.model('Tasks',{
+const taskSchema = mongoose.Schema({
     description:{
         type: String,
         required:true,
@@ -10,8 +9,16 @@ const Tasks = mongoose.model('Tasks',{
     completed:{
         type:Boolean,
         default:false,
+    },
+    owner:{
+        type: mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref: 'User'
     }
-})
+},{
+    timestamps:true
+},)
+const Tasks = mongoose.model('Tasks',taskSchema)
 // const newTask = new Tasks({
 //     description:"new House",
 //     completed:false
