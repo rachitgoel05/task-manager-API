@@ -74,7 +74,7 @@ userSchema.methods.toJSON = function () {
 }
 userSchema.methods.createAuthToken = async function() {
         const user = this
-        const token = jsontoken.sign({_id:user.id},'thisismycourse')
+        const token = jsontoken.sign({_id:user.id},process.env.JWT_SECRET)
         console.log(token)
         user.tokens = user.tokens.concat({token})
         await user.save()
